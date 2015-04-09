@@ -11,17 +11,22 @@ import UIKit
 class ViewController: UITableViewController, UISearchBarDelegate {
 
     var sectionHeaders = [FAQSection.One.simpleDescription(), FAQSection.Two.simpleDescription()]
-    
+    @IBOutlet weak var searchBar: UISearchBar!
     
     var questions = [FAQ]()
     
     
-    
     var filteredSearchResults = [String]()
+    
+    var searchActive : Bool = false
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        searchBar.delegate = self
         
+
+
         self.questions = [
             FAQ(section: FAQSection.One, title: "Q1", url: "www.bitsboard.com/FAQ/q1"),
             FAQ(section: FAQSection.Two, title: "Q2", url: "www.bitsboard.com/FAQ/q2")
@@ -78,6 +83,39 @@ class ViewController: UITableViewController, UISearchBarDelegate {
         
         let nvc = segue.destinationViewController as FAQDetailedViewController
         nvc.url = questionURL
+    }
+    
+    // Search
+    
+    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+        searchActive = true;
+    }
+    
+    func searchBarTextDidEndEditing(searchBar: UISearchBar) {
+        searchActive = false;
+    }
+    
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        searchActive = false;
+    }
+    
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        searchActive = false;
+    }
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        filtered = data.filter({ (text) -> Bool in
+            let tmp: NSString = text
+            let range = tmp.rangeOfString(searchText, options: NSStringCompareOptions.CaseInsensitiveSearch)
+            return range.location != NSNotFound
+        })
+        if(filtered.count == 0){
+            searchActive = false;
+        } else {
+            searchActive = true;
+        }
+        self.tableView.reloadData()
     }
     
 }

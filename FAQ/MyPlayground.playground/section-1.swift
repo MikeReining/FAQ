@@ -65,3 +65,18 @@ filteredResults.count
 filteredResults[0].title
 
 var sectionOne = Section.One.rawValue
+
+var searchResults = [Question]()
+
+func filterContentForSearchText(searchText: String) {
+    // Filter the array using the filter method
+    searchResults = questions.filter({( question: Question) -> Bool in
+        let stringMatch = question.title.rangeOfString(searchText)
+        return (stringMatch != nil)
+    })
+}
+
+filterContentForSearchText("Q1")
+
+searchResults
+
