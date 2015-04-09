@@ -8,30 +8,30 @@
 
 import UIKit
 
-class ViewController: UITableViewController, UISearchBarDelegate {
+class ViewController: UITableViewController, UISearchBarDelegate, UISearchDisplayDelegate {
 
-    var sectionHeaders = [FAQSection.One.simpleDescription(), FAQSection.Two.simpleDescription()]
-    @IBOutlet weak var searchBar: UISearchBar!
-    
     var questions = [FAQ]()
     
+    var filteredSearchResults = [FAQ]()
     
-    var filteredSearchResults = [String]()
-    
-    var searchActive : Bool = false
-
+    @IBOutlet weak var searchBar: UISearchBar!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        searchBar.delegate = self
         
-
-
         self.questions = [
-            FAQ(section: FAQSection.One, title: "Q1", url: "www.bitsboard.com/FAQ/q1"),
-            FAQ(section: FAQSection.Two, title: "Q2", url: "www.bitsboard.com/FAQ/q2")
+            FAQ(title: "Q1", url: "www.bitsboard.com/FAQ/q1"),
+            FAQ(title: "Q2", url: "www.bitsboard.com/FAQ/q2")
         ]
 
+        self.tableView.reloadData()
+
+        searchBar.delegate = self
+        
+        
+
+        
+        
         // Do any additional setup after loading the view, typically from a nib.
     }
 
@@ -39,16 +39,13 @@ class ViewController: UITableViewController, UISearchBarDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 2
-    }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let filteredResults = questions.filter({ $0.section.rawValue == section + 1})
-        filteredResults.count
-        println(filteredResults.count)
-        return filteredResults.count
+        if tableView == self.searchDisplayController!.searchResultsTableView {
+            return self.filteredSearchResults.count
+        } else {
+            return self.questions.count
+        }
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -57,66 +54,55 @@ class ViewController: UITableViewController, UISearchBarDelegate {
             cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "cell")
         }
         
-        let filteredResults = questions.filter({ $0.section.rawValue == indexPath.section + 1})
-        let question = filteredResults[indexPath.row]
-        let questionString = question.title
+        var question: FAQ
         
-        cell!.textLabel?.text = questionString
+        // Check to see whether the normal table or search results table is being displayed and set the Candy object from the appropriate array
+        if tableView == self.searchDisplayController!.searchResultsTableView {
+            question = filteredSearchResults[indexPath.row]
+        } else {
+            question = questions[indexPath.row]
+        }
+        
+        cell!.textLabel?.text = question.title
+//        cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+
         return cell!
     }
     
-    // section headers
+    func filterContentForSearchText(searchText: String) {
+        self.filteredSearchResults = self.questions.filter({( question : FAQ) -> Bool in
+            
+            var stringMatch = question.title.rangeOfString(searchText)
+            var searchResults = question.title.rangeOfString(searchText, options: .CaseInsensitiveSearch)
+            
+            return (searchResults != nil)
+        })
+    }
     
-    override func tableView(tableView: UITableView,titleForHeaderInSection section: Int)
-        -> String {
-            
-            
-                return sectionHeaders[section]
+    func searchDisplayController(controller: UISearchDisplayController!, shouldReloadTableForSearchString searchString: String!) -> Bool {
+        self.searchDisplayController!.searchBar.showsScopeBar = false
+        
+        self.filterContentForSearchText(searchString)
+        return true
+    }
+    
+    func searchDisplayController(controller: UISearchDisplayController!,
+        shouldReloadTableForSearchScope searchOption: Int) -> Bool {
+            self.filterContentForSearchText(self.searchDisplayController!.searchBar.text)
+            return false
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let indexPath = tableView.indexPathForCell(sender as UITableViewCell)!
-        let filteredResults = questions.filter({ $0.section.rawValue == indexPath.section + 1})
 
-        let question = filteredResults[indexPath.row]
+        let question = questions[indexPath.row]
         let questionURL = question.url
         
         let nvc = segue.destinationViewController as FAQDetailedViewController
         nvc.url = questionURL
     }
     
-    // Search
-    
-    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
-        searchActive = true;
-    }
-    
-    func searchBarTextDidEndEditing(searchBar: UISearchBar) {
-        searchActive = false;
-    }
-    
-    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
-        searchActive = false;
-    }
-    
-    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        searchActive = false;
-    }
-    
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        
-        filtered = data.filter({ (text) -> Bool in
-            let tmp: NSString = text
-            let range = tmp.rangeOfString(searchText, options: NSStringCompareOptions.CaseInsensitiveSearch)
-            return range.location != NSNotFound
-        })
-        if(filtered.count == 0){
-            searchActive = false;
-        } else {
-            searchActive = true;
-        }
-        self.tableView.reloadData()
-    }
+
     
 }
     
