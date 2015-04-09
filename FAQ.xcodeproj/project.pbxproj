@@ -9,12 +9,12 @@
 /* Begin PBXBuildFile section */
 		273B32921AD70E8F00CDD4CE /* FAQ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273B32911AD70E8F00CDD4CE /* FAQ.swift */; };
 		273D0DB51AD6DCC100FD06C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273D0DB41AD6DCC100FD06C8 /* AppDelegate.swift */; };
-		273D0DB71AD6DCC100FD06C8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273D0DB61AD6DCC100FD06C8 /* ViewController.swift */; };
 		273D0DBA1AD6DCC100FD06C8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 273D0DB81AD6DCC100FD06C8 /* Main.storyboard */; };
 		273D0DBC1AD6DCC100FD06C8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 273D0DBB1AD6DCC100FD06C8 /* Images.xcassets */; };
 		273D0DBF1AD6DCC100FD06C8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 273D0DBD1AD6DCC100FD06C8 /* LaunchScreen.xib */; };
 		273D0DCB1AD6DCC100FD06C8 /* FAQTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273D0DCA1AD6DCC100FD06C8 /* FAQTests.swift */; };
 		273D0DD81AD6F7D100FD06C8 /* FAQDetailedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273D0DD71AD6F7D100FD06C8 /* FAQDetailedViewController.swift */; };
+		2759AB191AD73FD10078508B /* FAQTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2759AB181AD73FD10078508B /* FAQTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,7 +32,6 @@
 		273D0DAF1AD6DCC100FD06C8 /* FAQ.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FAQ.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		273D0DB31AD6DCC100FD06C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		273D0DB41AD6DCC100FD06C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		273D0DB61AD6DCC100FD06C8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		273D0DB91AD6DCC100FD06C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		273D0DBB1AD6DCC100FD06C8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		273D0DBE1AD6DCC100FD06C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -41,6 +40,7 @@
 		273D0DCA1AD6DCC100FD06C8 /* FAQTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQTests.swift; sourceTree = "<group>"; };
 		273D0DD61AD6EE8800FD06C8 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 		273D0DD71AD6F7D100FD06C8 /* FAQDetailedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FAQDetailedViewController.swift; sourceTree = "<group>"; };
+		2759AB181AD73FD10078508B /* FAQTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FAQTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,7 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				273D0DB41AD6DCC100FD06C8 /* AppDelegate.swift */,
-				273D0DB61AD6DCC100FD06C8 /* ViewController.swift */,
+				2759AB181AD73FD10078508B /* FAQTableViewController.swift */,
 				273B32911AD70E8F00CDD4CE /* FAQ.swift */,
 				273D0DD61AD6EE8800FD06C8 /* MyPlayground.playground */,
 				273D0DB81AD6DCC100FD06C8 /* Main.storyboard */,
@@ -221,9 +221,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				273D0DD81AD6F7D100FD06C8 /* FAQDetailedViewController.swift in Sources */,
-				273D0DB71AD6DCC100FD06C8 /* ViewController.swift in Sources */,
 				273B32921AD70E8F00CDD4CE /* FAQ.swift in Sources */,
 				273D0DB51AD6DCC100FD06C8 /* AppDelegate.swift in Sources */,
+				2759AB191AD73FD10078508B /* FAQTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

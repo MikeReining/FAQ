@@ -8,8 +8,8 @@
 
 import UIKit
 
-class ViewController: UITableViewController, UISearchBarDelegate, UISearchDisplayDelegate {
-
+class FAQTableViewController: UITableViewController, UISearchBarDelegate, UISearchDisplayDelegate {
+    
     var questions = [FAQ]()
     
     var filteredSearchResults = [FAQ]()
@@ -23,18 +23,18 @@ class ViewController: UITableViewController, UISearchBarDelegate, UISearchDispla
             FAQ(title: "Q1", url: "www.bitsboard.com/FAQ/q1"),
             FAQ(title: "Q2", url: "www.bitsboard.com/FAQ/q2")
         ]
-
+        
         self.tableView.reloadData()
-
+        
         searchBar.delegate = self
         
         
-
+        
         
         
         // Do any additional setup after loading the view, typically from a nib.
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -64,8 +64,8 @@ class ViewController: UITableViewController, UISearchBarDelegate, UISearchDispla
         }
         
         cell!.textLabel?.text = question.title
-//        cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
-
+        //        cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+        
         return cell!
     }
     
@@ -92,18 +92,29 @@ class ViewController: UITableViewController, UISearchBarDelegate, UISearchDispla
             return false
     }
     
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
         let indexPath = tableView.indexPathForCell(sender as UITableViewCell)!
-
+        
         let question = questions[indexPath.row]
-        let questionURL = question.url
         
         let nvc = segue.destinationViewController as FAQDetailedViewController
-        nvc.url = questionURL
+        nvc.title = question.title
+        nvc.url = question.url
+        
     }
     
-
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        var searchText = searchBar.text
+        println(searchText)
+    }
+    
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        var searchText = searchBar.text
+        println(searchText)
+    }
     
 }
-    
+
 

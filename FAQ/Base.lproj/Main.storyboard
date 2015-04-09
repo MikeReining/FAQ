@@ -7,7 +7,7 @@
         <!--FAQ-->
         <scene sceneID="igf-IF-7I5">
             <objects>
-                <tableViewController id="j65-Rj-K8u" customClass="ViewController" customModule="FAQ" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="j65-Rj-K8u" customClass="FAQTableViewController" customModule="FAQ" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="UdY-9F-hgk">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -27,7 +27,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="J3I-jt-4g8" kind="show" id="aYh-lH-CNc"/>
+                                    <segue destination="J3I-jt-4g8" kind="show" identifier="showAnswer" id="aYh-lH-CNc"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
