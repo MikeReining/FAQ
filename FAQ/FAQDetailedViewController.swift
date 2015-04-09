@@ -9,12 +9,12 @@
 import UIKit
 
 class FAQDetailedViewController: UIViewController {
-    var url = String!
+    var url: String!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        println(url)
         // Do any additional setup after loading the view.
     }
 

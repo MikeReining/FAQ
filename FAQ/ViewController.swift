@@ -8,31 +8,24 @@
 
 import UIKit
 
-class ViewController: UITableViewController {
-    var FAQ = [
-        "test",
-        "q2"
-        
-    ]
-    
-    var Section1 = [
-        ["question": "Q1","url": "www.bitsboard.com/FAQ/q1"],
-        ["question": "Q2","url": "www.bitsboard.com/FAQ/q2"],
-    ]
-    
-    var Section2 = [
-        ["question": "Q3","url": "www.bitsboard.com/FAQ/q3"],
-        ["question": "Q4","url": "www.bitsboard.com/FAQ/q4"],
-    ]
-    
-    var FAQArray: [[Dictionary<String, String>]]!
+class ViewController: UITableViewController, UISearchBarDelegate {
 
-    var sectionHeaders = ["Common Questions", "Getting Started"]
+    var sectionHeaders = [FAQSection.One.simpleDescription(), FAQSection.Two.simpleDescription()]
+    
+    
+    var questions = [FAQ]()
+    
+    
+    
+    var filteredSearchResults = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        FAQArray = [Section1,Section2]
-
+        
+        self.questions = [
+            FAQ(section: FAQSection.One, title: "Q1", url: "www.bitsboard.com/FAQ/q1"),
+            FAQ(section: FAQSection.Two, title: "Q2", url: "www.bitsboard.com/FAQ/q2")
+        ]
 
         // Do any additional setup after loading the view, typically from a nib.
     }
@@ -43,12 +36,14 @@ class ViewController: UITableViewController {
     }
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return FAQArray.count
+        return 2
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let currentSection = FAQArray[section]
-        return currentSection.count
+        let filteredResults = questions.filter({ $0.section.rawValue == section + 1})
+        filteredResults.count
+        println(filteredResults.count)
+        return filteredResults.count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -57,10 +52,9 @@ class ViewController: UITableViewController {
             cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "cell")
         }
         
-        let section = FAQArray[indexPath.section]
-
-        let question = section[indexPath.row]
-        let questionString = question["question"]
+        let filteredResults = questions.filter({ $0.section.rawValue == indexPath.section + 1})
+        let question = filteredResults[indexPath.row]
+        let questionString = question.title
         
         cell!.textLabel?.text = questionString
         return cell!
@@ -70,10 +64,21 @@ class ViewController: UITableViewController {
     
     override func tableView(tableView: UITableView,titleForHeaderInSection section: Int)
         -> String {
-                return self.sectionHeaders[section] as String
+            
+            
+                return sectionHeaders[section]
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let indexPath = tableView.indexPathForCell(sender as UITableViewCell)!
+        let filteredResults = questions.filter({ $0.section.rawValue == indexPath.section + 1})
 
+        let question = filteredResults[indexPath.row]
+        let questionURL = question.url
+        
+        let nvc = segue.destinationViewController as FAQDetailedViewController
+        nvc.url = questionURL
+    }
     
 }
     

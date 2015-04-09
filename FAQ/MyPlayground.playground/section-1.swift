@@ -23,3 +23,45 @@ var question = Section1[0]
 question["question"]
 question["url"]
 
+enum Section: Int {
+    case One = 1
+    case Two, Three
+    func simpleDescription() -> String {
+        switch self {
+        case .One:
+            return "Common Questions"
+        case .Two:
+            return "Getting Started"
+        case .Three:
+            return "Other"
+        default:
+            return String(self.rawValue)
+            
+        }
+    }
+}
+
+var test = Section.One.rawValue
+
+
+struct Question {
+    let section : Section
+    let title : String
+    let url: String
+}
+
+var questions = [
+    Question(section: Section.One, title: "Q1", url: "www.1"),
+    Question(section: Section.One, title: "Q2", url: "www.2"),
+    Question(section: Section.Two, title: "Q3", url: "www.3")
+]
+
+questions.count
+
+let filteredResults = questions.filter({ $0.section.rawValue == 1})
+
+filteredResults.count
+
+filteredResults[0].title
+
+var sectionOne = Section.One.rawValue
