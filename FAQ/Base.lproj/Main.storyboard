@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="g2f-tV-OiZ">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--FAQ-->
@@ -66,19 +67,39 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bWr-9v-nMH">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <rect key="frame" x="16" y="64" width="568" height="492"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </webView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="bWr-9v-nMH" firstAttribute="leading" secondItem="Zyw-VI-Ez8" secondAttribute="leading" id="C7p-RA-xWY"/>
-                            <constraint firstItem="bWr-9v-nMH" firstAttribute="top" secondItem="Zyw-VI-Ez8" secondAttribute="top" id="N8c-vn-qQf"/>
-                            <constraint firstAttribute="trailing" secondItem="bWr-9v-nMH" secondAttribute="trailing" id="co0-uM-QRT"/>
-                            <constraint firstItem="08l-U5-mgU" firstAttribute="top" secondItem="bWr-9v-nMH" secondAttribute="bottom" id="mAE-JY-2WQ"/>
+                            <constraint firstItem="bWr-9v-nMH" firstAttribute="top" secondItem="Qyy-lU-8vs" secondAttribute="bottom" id="0KZ-tj-EHK"/>
+                            <constraint firstItem="bWr-9v-nMH" firstAttribute="leading" secondItem="Zyw-VI-Ez8" secondAttribute="leadingMargin" id="YVt-Uy-szZ"/>
+                            <constraint firstItem="08l-U5-mgU" firstAttribute="top" secondItem="bWr-9v-nMH" secondAttribute="bottom" id="fBD-VR-0kK"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="bWr-9v-nMH" secondAttribute="trailing" id="r5y-9F-Ieg"/>
                         </constraints>
                     </view>
+                    <toolbarItems>
+                        <barButtonItem title="Helpful?" style="plain" id="FzU-wb-bbp">
+                            <color key="tintColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <connections>
+                                <action selector="helpfulButtonPressed:" destination="J3I-jt-4g8" id="jTg-aB-8V7"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem title="Yes" id="le0-FO-1il">
+                            <connections>
+                                <action selector="yesButtonPressed:" destination="J3I-jt-4g8" id="TI0-9j-F1h"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem title="No" id="Jd8-NU-eN0">
+                            <connections>
+                                <action selector="noButtonPressed:" destination="J3I-jt-4g8" id="JPf-RR-EBs"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="helpful" destination="FzU-wb-bbp" id="yOl-fD-TZD"/>
                         <outlet property="webView" destination="bWr-9v-nMH" id="bgw-az-msJ"/>
                     </connections>
                 </viewController>
@@ -89,11 +110,14 @@
         <!--Navigation Controller-->
         <scene sceneID="rHE-f4-ayJ">
             <objects>
-                <navigationController id="g2f-tV-OiZ" sceneMemberID="viewController">
+                <navigationController toolbarHidden="NO" id="g2f-tV-OiZ" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Pqv-HH-Oe9">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="N8m-kL-gyY">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="j65-Rj-K8u" kind="relationship" relationship="rootViewController" id="UbY-rD-ngk"/>
                     </connections>

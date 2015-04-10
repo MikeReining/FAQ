@@ -145,8 +145,8 @@ class FAQTableViewController: UITableViewController, UISearchBarDelegate, UISear
             if sender as UITableView == self.searchDisplayController!.searchResultsTableView {
                 let indexPath = self.searchDisplayController!.searchResultsTableView.indexPathForSelectedRow()!
                 let selectedQuestion = self.searchResults[indexPath.row]
+                nvc.question = selectedQuestion
                 nvc.title = selectedQuestion.question
-                nvc.urlSlug = selectedQuestion.urlSlug
                 
                 // send selected Answer to Parse
                     
@@ -160,9 +160,9 @@ class FAQTableViewController: UITableViewController, UISearchBarDelegate, UISear
             } else {
                 let indexPath = self.tableView.indexPathForSelectedRow()!
                 let selectedQuestion = self.questions[indexPath.row]
+                nvc.question = selectedQuestion
                 nvc.title = selectedQuestion.question
-                nvc.urlSlug = selectedQuestion.urlSlug
-                
+
                 // send selected Answer to Parse
                 
                 let search = PFObject(className: "FAQAnswers")
