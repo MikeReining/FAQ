@@ -7,12 +7,15 @@
 //
 
 import UIKit
+import Parse
 
 class FAQTableViewController: UITableViewController, UISearchBarDelegate, UISearchDisplayDelegate {
     
     var questions = [FAQ]()
     
     var searchResults = [FAQ]()
+    var searchQuery: String?
+    
     
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -31,6 +34,8 @@ class FAQTableViewController: UITableViewController, UISearchBarDelegate, UISear
         self.tableView.reloadData()
         
         searchBar.delegate = self
+        
+
         
     }
     
@@ -86,12 +91,53 @@ class FAQTableViewController: UITableViewController, UISearchBarDelegate, UISear
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         self.performSegueWithIdentifier("showAnswer", sender: tableView)
+        
+        
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         var searchText = searchBar.text
-        println(searchText)
+        
+        // send query to Parse
+        
+        let search = PFObject(className: "FAQSearches")
+        search["query"] = searchText
+        search["type"] = "search"
+        search.saveInBackgroundWithBlock { (success: Bool, error: NSError!) -> Void in
+            println("Object has been saved.")
+        }
     }
+    
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        var searchText = searchBar.text
+        
+        // send query to Parse
+        if searchText != "" {
+            let search = PFObject(className: "FAQSearches")
+            search["query"] = searchText
+            search["type"] = "cancel"
+            search.saveInBackgroundWithBlock { (success: Bool, error: NSError!) -> Void in
+                println("Object has been saved.")
+            }
+        }
+    }
+    
+    func searchBarTextDidEndEditing(searchBar: UISearchBar) {
+        searchQuery = searchBar.text
+        
+        // send query to Parse
+        if searchQuery != "" {
+
+            let search = PFObject(className: "FAQSearches")
+            search["query"] = searchQuery
+            search["type"] = "editing"
+            search.saveInBackgroundWithBlock { (success: Bool, error: NSError!) -> Void in
+                println("Object has been saved.")
+            }
+        }
+    }
+    
+
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == "showAnswer" {
@@ -101,11 +147,30 @@ class FAQTableViewController: UITableViewController, UISearchBarDelegate, UISear
                 let selectedQuestion = self.searchResults[indexPath.row]
                 nvc.title = selectedQuestion.question
                 nvc.urlSlug = selectedQuestion.urlSlug
+                
+                // send selected Answer to Parse
+                    
+                let search = PFObject(className: "FAQAnswers")
+                search["answer"] = selectedQuestion.question
+                search["type"] = "search"
+                search.saveInBackgroundWithBlock { (success: Bool, error: NSError!) -> Void in
+                    println("Object has been saved.")
+                }
+                
             } else {
                 let indexPath = self.tableView.indexPathForSelectedRow()!
                 let selectedQuestion = self.questions[indexPath.row]
                 nvc.title = selectedQuestion.question
                 nvc.urlSlug = selectedQuestion.urlSlug
+                
+                // send selected Answer to Parse
+                
+                let search = PFObject(className: "FAQAnswers")
+                search["answer"] = selectedQuestion.question
+                search["type"] = "main"
+                search.saveInBackgroundWithBlock { (success: Bool, error: NSError!) -> Void in
+                    println("Object has been saved.")
+                }
             }
         }
     }
