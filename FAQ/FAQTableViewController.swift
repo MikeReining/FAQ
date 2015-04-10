@@ -19,8 +19,8 @@ class FAQTableViewController: UITableViewController, UISearchBarDelegate, UISear
     override func viewDidLoad() {
         // Sample Data for candyArray
         self.questions = [
-            FAQ(question: "Q1", url: "url1"),
-            FAQ(question: "Q2", url: "url2")
+            FAQ(question: "Q1", url: "http://www.google.com"),
+            FAQ(question: "Q2", url: "http://www.bitsboard.com")
         ]
         
         // Reload the table
@@ -91,15 +91,17 @@ class FAQTableViewController: UITableViewController, UISearchBarDelegate, UISear
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == "showAnswer" {
-            let candyDetailViewController = segue.destinationViewController as FAQDetailViewController
+            let nvc = segue.destinationViewController as FAQDetailViewController
             if sender as UITableView == self.searchDisplayController!.searchResultsTableView {
                 let indexPath = self.searchDisplayController!.searchResultsTableView.indexPathForSelectedRow()!
-                let destinationTitle = self.searchResults[indexPath.row].question
-                candyDetailViewController.title = destinationTitle
+                let selectedQuestion = self.searchResults[indexPath.row]
+                nvc.title = selectedQuestion.question
+                nvc.urlString = selectedQuestion.url
             } else {
                 let indexPath = self.tableView.indexPathForSelectedRow()!
-                let destinationTitle = self.questions[indexPath.row].question
-                candyDetailViewController.title = destinationTitle
+                let selectedQuestion = self.questions[indexPath.row]
+                nvc.title = selectedQuestion.question
+                nvc.urlString = selectedQuestion.url
             }
         }
     }

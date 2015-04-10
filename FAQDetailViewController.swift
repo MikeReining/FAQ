@@ -9,5 +9,14 @@
 import UIKit
 
 class FAQDetailViewController: UIViewController {
-
+    var urlString: String!
+    @IBOutlet weak var webView: UIWebView!
+    
+    
+    override func viewDidLoad() {
+        // Loading a URL via a web view
+        let url = NSURL(string: urlString!)!
+        let request = NSURLRequest(URL: url)
+        webView.loadRequest(request)
+    }
 }
