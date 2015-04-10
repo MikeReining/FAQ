@@ -12,68 +12,56 @@ class FAQTableViewController: UITableViewController, UISearchBarDelegate, UISear
     
     var questions = [FAQ]()
     
-    var filteredSearchResults = [FAQ]()
+    var searchResults = [FAQ]()
     
     @IBOutlet weak var searchBar: UISearchBar!
     
     override func viewDidLoad() {
-        super.viewDidLoad()
-        
+        // Sample Data for candyArray
         self.questions = [
-            FAQ(title: "Q1", url: "www.bitsboard.com/FAQ/q1"),
-            FAQ(title: "Q2", url: "www.bitsboard.com/FAQ/q2")
+            FAQ(question: "Q1", url: "url1"),
+            FAQ(question: "Q2", url: "url2")
         ]
         
+        // Reload the table
         self.tableView.reloadData()
         
         searchBar.delegate = self
         
-        
-        
-        
-        
-        // Do any additional setup after loading the view, typically from a nib.
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == self.searchDisplayController!.searchResultsTableView {
-            return self.filteredSearchResults.count
+            return self.searchResults.count
         } else {
             return self.questions.count
         }
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier("cell") as? UITableViewCell
-        if cell == nil {
-            cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "cell")
-        }
+        //ask for a reusable cell from the tableview, the tableview will create a new one if it doesn't have any
+        let cell = self.tableView.dequeueReusableCellWithIdentifier("Cell") as UITableViewCell
         
-        var question: FAQ
-        
+        var candy : FAQ
         // Check to see whether the normal table or search results table is being displayed and set the Candy object from the appropriate array
         if tableView == self.searchDisplayController!.searchResultsTableView {
-            question = filteredSearchResults[indexPath.row]
+            candy = searchResults[indexPath.row]
         } else {
-            question = questions[indexPath.row]
+            candy = questions[indexPath.row]
         }
         
-        cell!.textLabel?.text = question.title
-        //        cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+        // Configure the cell
+        cell.textLabel!.text = candy.question
+        cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
         
-        return cell!
+        return cell
     }
     
     func filterContentForSearchText(searchText: String) {
-        self.filteredSearchResults = self.questions.filter({( question : FAQ) -> Bool in
+        self.searchResults = self.questions.filter({( candy : FAQ) -> Bool in
             
-            var stringMatch = question.title.rangeOfString(searchText)
-            var searchResults = question.title.rangeOfString(searchText, options: .CaseInsensitiveSearch)
+            var stringMatch = candy.question.rangeOfString(searchText)
+            var searchResults = candy.question.rangeOfString(searchText, options: .CaseInsensitiveSearch)
             
             return (searchResults != nil)
         })
@@ -92,17 +80,8 @@ class FAQTableViewController: UITableViewController, UISearchBarDelegate, UISear
             return false
     }
     
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        let indexPath = tableView.indexPathForCell(sender as UITableViewCell)!
-        
-        let question = questions[indexPath.row]
-        
-        let nvc = segue.destinationViewController as FAQDetailedViewController
-        nvc.title = question.title
-        nvc.url = question.url
-        
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        self.performSegueWithIdentifier("showAnswer", sender: tableView)
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
@@ -110,11 +89,18 @@ class FAQTableViewController: UITableViewController, UISearchBarDelegate, UISear
         println(searchText)
     }
     
-    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
-        var searchText = searchBar.text
-        println(searchText)
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+        if segue.identifier == "showAnswer" {
+            let candyDetailViewController = segue.destinationViewController as FAQDetailViewController
+            if sender as UITableView == self.searchDisplayController!.searchResultsTableView {
+                let indexPath = self.searchDisplayController!.searchResultsTableView.indexPathForSelectedRow()!
+                let destinationTitle = self.searchResults[indexPath.row].question
+                candyDetailViewController.title = destinationTitle
+            } else {
+                let indexPath = self.tableView.indexPathForSelectedRow()!
+                let destinationTitle = self.questions[indexPath.row].question
+                candyDetailViewController.title = destinationTitle
+            }
+        }
     }
-    
 }
-
-
