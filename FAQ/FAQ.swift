@@ -10,5 +10,5 @@ import Foundation
 
 struct FAQ {
     let question : String
-    let url: String
+    let urlSlug: String
 }

@@ -19,8 +19,12 @@ class FAQTableViewController: UITableViewController, UISearchBarDelegate, UISear
     override func viewDidLoad() {
         // Sample Data for candyArray
         self.questions = [
-            FAQ(question: "Q1", url: "http://www.google.com"),
-            FAQ(question: "Q2", url: "http://www.bitsboard.com")
+            FAQ(question: "How do I create and edit a board?", urlSlug: "faq/how-do-i-create-and-edit-a-board"),
+            FAQ(question: "How do I delete boards from the catalog?", urlSlug: "faq/how-do-i-delete-boards-from-the-catalog"),
+            FAQ(question: "How do I delete a user?", urlSlug: "how-do-i-delete-a-user"),
+            FAQ(question: "How do I change the username?", urlSlug: "faq/how-do-i-change-the-username"),
+            FAQ(question: "How can I arrange and sort my bits (flashcards)?", urlSlug: "how-can-i-arrange-and-sort-my-bits-flashcards"),
+            FAQ(question: "How can I change the board thumbnail?", urlSlug: "how-can-i-change-the-board-thumbnail")
         ]
         
         // Reload the table
@@ -96,12 +100,12 @@ class FAQTableViewController: UITableViewController, UISearchBarDelegate, UISear
                 let indexPath = self.searchDisplayController!.searchResultsTableView.indexPathForSelectedRow()!
                 let selectedQuestion = self.searchResults[indexPath.row]
                 nvc.title = selectedQuestion.question
-                nvc.urlString = selectedQuestion.url
+                nvc.urlSlug = selectedQuestion.urlSlug
             } else {
                 let indexPath = self.tableView.indexPathForSelectedRow()!
                 let selectedQuestion = self.questions[indexPath.row]
                 nvc.title = selectedQuestion.question
-                nvc.urlString = selectedQuestion.url
+                nvc.urlSlug = selectedQuestion.urlSlug
             }
         }
     }
