@@ -9,13 +9,17 @@
 import UIKit
 import Parse
 
-class FAQTableViewController: UITableViewController, UISearchBarDelegate, UISearchDisplayDelegate {
+class FAQTableViewController: UITableViewController, UISearchResultsUpdating {
     
     var questions = [FAQ]()
     
-    var searchResults = [FAQ]()
+    var searchResults = [FAQ](){
+        didSet  {self.tableView.reloadData()}
+    }
     var searchQuery: String?
     
+    var searchController = UISearchController()
+
     
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -57,8 +61,8 @@ class FAQTableViewController: UITableViewController, UISearchBarDelegate, UISear
             FAQ(label: "Side by Side", type: "Game Settings", urlSlug: "games/side-by-side"),
             FAQ(label: "Odd One Out", type: "Game Settings", urlSlug: "games/odd-one-out"),
             FAQ(label: "Sort It", type: "Game Settings", urlSlug: "games/sort-it"),
-            FAQ(label: "Unscramble", type: "Games Settings", urlSlug: "games/unscramble"),
-            FAQ(label: "Puzzles", type: "Games Settings", urlSlug: "games/puzzles"),
+            FAQ(label: "Unscramble", type: "Game Settings", urlSlug: "games/unscramble"),
+            FAQ(label: "Puzzles", type: "Game Settings", urlSlug: "games/puzzles"),
             FAQ(label: "Review Game", type: "Game Settings", urlSlug: "games/review-game"),
             FAQ(label: "Trace It", type: "Game Settings", urlSlug: "games/trace-it"),
             FAQ(label: "Missing Letter", type: "Game Settings", urlSlug: "games/missing-letter"),
@@ -83,14 +87,40 @@ class FAQTableViewController: UITableViewController, UISearchBarDelegate, UISear
         // Reload the table
         self.tableView.reloadData()
         
-        searchBar.delegate = self
+        //searchBar.delegate = self
         
-
+        // Configure countrySearchController
+        self.searchController = ({
+            // Two setups provided below:
+            
+            // Setup One: This setup present the results in the current view.
+            let controller = UISearchController(searchResultsController: nil)
+            controller.searchResultsUpdater = self
+            controller.hidesNavigationBarDuringPresentation = false
+            controller.dimsBackgroundDuringPresentation = false
+            controller.searchBar.searchBarStyle = .Minimal
+            controller.searchBar.sizeToFit()
+            self.tableView.tableHeaderView = controller.searchBar
+            
+            /*
+            // Setup Two: Alternative - This presents the results in a sepearate tableView
+            let storyBoard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+            let alternateController:AlternateTableViewController = storyBoard.instantiateViewControllerWithIdentifier("aTV") as! AlternateTableViewController
+            let controller = UISearchController(searchResultsController: alternateController)
+            controller.hidesNavigationBarDuringPresentation = false
+            controller.dimsBackgroundDuringPresentation = false
+            controller.searchResultsUpdater = alternateController
+            controller.definesPresentationContext = false
+            controller.searchBar.sizeToFit()
+            self.countryTable.tableHeaderView = controller.searchBar
+            */
+            return controller
+        })()
         
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView == self.searchDisplayController!.searchResultsTableView {
+        if searchController.active && searchController.searchBar.text != "" {
             return self.searchResults.count
         } else {
             return self.questions.count
@@ -99,22 +129,24 @@ class FAQTableViewController: UITableViewController, UISearchBarDelegate, UISear
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         //ask for a reusable cell from the tableview, the tableview will create a new one if it doesn't have any
-        let cell = self.tableView.dequeueReusableCellWithIdentifier("Cell") as! UITableViewCell
-        let cell = self.tableView.dequeueReusableCellWithIdentifier(<#identifier: String#>)
-        var question : FAQ
-        // Check to see whether the normal table or search results table is being displayed and set the object from the appropriate array
-        if tableView == self.searchDisplayController!.searchResultsTableView {
-            question = searchResults[indexPath.row]
-        } else {
-            question = questions[indexPath.row]
+        
+        var cell = self.tableView.dequeueReusableCellWithIdentifier("Cell") as! UITableViewCell
+        var answer: FAQ
+        if (self.searchController.active) && searchController.searchBar.text != ""
+        {
+            answer = self.searchResults[indexPath.row]
         }
-        
-        // Configure the cell
-        cell.textLabel!.text = question.label
-        cell.detailTextLabel?.text = question.type
-        cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
-        
+            
+        else
+        {
+            answer = self.questions[indexPath.row]
+       }
+        cell.textLabel?.text! = answer.label
+        if answer.type != nil {
+            cell.detailTextLabel?.text! = answer.type!
+        }
         return cell
+
     }
     
     func filterContentForSearchText(searchText: String) {
@@ -127,18 +159,24 @@ class FAQTableViewController: UITableViewController, UISearchBarDelegate, UISear
         })
     }
     
-    func searchDisplayController(controller: UISearchDisplayController!, shouldReloadTableForSearchString searchString: String!) -> Bool {
-        self.searchDisplayController!.searchBar.showsScopeBar = false
+    func updateSearchResultsForSearchController(searchController: UISearchController) {
+        self.searchResults.removeAll(keepCapacity: false)
         
-        self.filterContentForSearchText(searchString)
-        return true
+        let searchText = searchController.searchBar.text
+        let results = filter(questions) { $0.label.rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil }
+        
+        println("found \(results.count) result with: \(searchText)");
+        for result in results {
+            self.searchResults.append(result)
+            println(result.label);
+        }
     }
     
-    func searchDisplayController(controller: UISearchDisplayController!,
-        shouldReloadTableForSearchScope searchOption: Int) -> Bool {
-            self.filterContentForSearchText(self.searchDisplayController!.searchBar.text)
-            return false
-    }
+    
+    
+    
+    
+
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         self.performSegueWithIdentifier("showAnswer", sender: tableView)
@@ -188,13 +226,17 @@ class FAQTableViewController: UITableViewController, UISearchBarDelegate, UISear
         }
     }
     
+    
+    
+    
+    
 
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == "showAnswer" {
             let nvc = segue.destinationViewController as! FAQDetailViewController
-            if sender as! UITableView == self.searchDisplayController!.searchResultsTableView {
-                let indexPath = self.searchDisplayController!.searchResultsTableView.indexPathForSelectedRow()!
+            if searchController.active {
+                let indexPath = self.tableView.indexPathForSelectedRow()!
                 let selectedQuestion = self.searchResults[indexPath.row]
                 nvc.question = selectedQuestion
                 nvc.title = selectedQuestion.label
