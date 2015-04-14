@@ -39,7 +39,7 @@ class FAQTableViewController: UITableViewController, UISearchResultsUpdating {
             FAQ(label: "How to create and edit a board?", type: "User Guide", urlSlug: "how-do-i-create-and-edit-a-board"),
             FAQ(label: "Manage Users", type: "User Guide", urlSlug: "guides/manage-users"),
             FAQ(label: "Track Users", type: "User Guide", urlSlug: "guides/track-users"),
-            FAQ(label: "Bitsboard for Preschoolsers", type: "User Guides", urlSlug: "bitsboard-for-preschoolers"),
+            FAQ(label: "Bitsboard for Preschoolsers", type: "User Guide", urlSlug: "bitsboard-for-preschoolers"),
 
             
             // Games
