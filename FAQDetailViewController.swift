@@ -59,9 +59,9 @@ class FAQDetailViewController: UIViewController {
     func sentYesToParse() {
         // send answer to Parse
         let feedback = PFObject(className: "Helpful")
-        feedback["query"] = self.question.question
+        feedback["query"] = self.question.label
         feedback["helpful"] = "Yes"
-        feedback.saveInBackgroundWithBlock { (success: Bool, error: NSError!) -> Void in
+        feedback.saveInBackgroundWithBlock { (success, error) -> Void in
             println("Object has been saved.")
         }
     }
@@ -69,9 +69,9 @@ class FAQDetailViewController: UIViewController {
     func sentNoToParse() {
         // send answer to Parse
         let feedback = PFObject(className: "Helpful")
-        feedback["query"] = self.question.question
+        feedback["query"] = self.question.label
         feedback["helpful"] = "No"
-        feedback.saveInBackgroundWithBlock { (success: Bool, error: NSError!) -> Void in
+        feedback.saveInBackgroundWithBlock { (success, error) -> Void in
             println("Object has been saved.")
         }
     }

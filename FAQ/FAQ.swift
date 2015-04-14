@@ -9,6 +9,7 @@
 import Foundation
 
 struct FAQ {
-    let question : String
+    let label : String
+    let type: String?
     let urlSlug: String
 }
